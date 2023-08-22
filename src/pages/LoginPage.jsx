@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Wrap from '../styled/Wrap.styled';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 
 const Title = styled.h1`
   font-size: 35px;
@@ -16,12 +17,12 @@ const Input = styled.input`
   font-size: 16px;
   padding: 0.3em 0.8em;
   border-radius: 4px;
-  border: 1px solid ${(props) => (props.isError ? 'tomato' : '#777')};
+  border: 1px solid ${(props) => (props.$isError ? 'tomato' : '#777')};
   display: block;
   width: 300px;
   margin-bottom: 10px;
   width: 100%;
-  background-color: ${(props) => (props.isError ? '#ffd8d1' : 'trasparent')};
+  background-color: ${(props) => (props.$isError ? '#ffd8d1' : 'trasparent')};
 `;
 
 const SubmitBnt = styled.button.attrs({
@@ -47,7 +48,7 @@ const ErrorMsg = styled.p`
 export default function LoginPage() {
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: 'emma.wong@reqres.in',
       password: '',
     },
     validationSchema: Yup.object({
@@ -67,8 +68,28 @@ export default function LoginPage() {
     }),
     onSubmit: (values) => {
       console.log('forma pateikta, duomenys:', values);
+      handleLogin(values);
     },
   });
+
+  function handleLogin(userCredentialsObj) {
+    console.log('userCredentialsObj ===', userCredentialsObj);
+    axios
+      .post('https://reqres.in/api/login', userCredentialsObj)
+      .then((ats) => {
+        console.log('ats ===', ats);
+        // jei gavom token tai pavyko prisiloginti
+        // atspausdinti token
+        // naviguosim i home arba vip page
+      })
+      .catch((error) => {
+        // prisiloginti nepavyko
+        console.warn('ivyko klaida:', error);
+        console.log('error.response.data.error ===', error.response.data.error);
+        // formik.errors.email = error.response.data.error;
+        formik.setErrors({ email: error.response.data.error });
+      });
+  }
 
   // console.log('formik.values ===', formik.values);
   // console.log('formik.errors ===', formik.errors);
@@ -78,7 +99,7 @@ export default function LoginPage() {
       <Title>Login here</Title>
       <FormContainer onSubmit={formik.handleSubmit}>
         <Input
-          isError={formik.errors.email && formik.touched.email}
+          $isError={formik.errors.email && formik.touched.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.email}
