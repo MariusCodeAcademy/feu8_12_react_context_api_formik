@@ -45,7 +45,11 @@ export default function Header() {
         <OneLink to={'/about'}>About us</OneLink>
         {ctx.isUserLoggedIn && <OneLink to={'/vip'}>VIP</OneLink>}
         {!ctx.isUserLoggedIn && <OneLink to={'/login'}>Login</OneLink>}
-        {ctx.isUserLoggedIn && <OneLink to={'/login'}>Logout</OneLink>}
+        {ctx.isUserLoggedIn && (
+          <OneLink onClick={ctx.logout} to={'/login'}>
+            Logout
+          </OneLink>
+        )}
       </Nav>
     </HeaderContainer>
   );

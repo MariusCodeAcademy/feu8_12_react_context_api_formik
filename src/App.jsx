@@ -20,10 +20,15 @@ export default function App() {
     setUserEmail(emailVal);
   }
 
+  function logout() {
+    setUserEmail(null);
+  }
+
   const ctx = {
     email: userEmail,
     isUserLoggedIn: isUserLoggedIn,
     login: login,
+    logout: logout,
   };
 
   return (
