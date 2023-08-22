@@ -3,6 +3,7 @@ import Wrap from '../styled/Wrap.styled';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { useState } from 'react';
 
 const Title = styled.h1`
   font-size: 35px;
@@ -46,6 +47,8 @@ const ErrorMsg = styled.p`
 `;
 
 export default function LoginPage() {
+  const [loginSuccess, setLoginSuccess] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       email: 'emma.wong@reqres.in',
@@ -80,14 +83,20 @@ export default function LoginPage() {
         console.log('ats ===', ats);
         // jei gavom token tai pavyko prisiloginti
         // atspausdinti token
+        console.log('ats.data.token ===', ats.data.token);
         // naviguosim i home arba vip page
+        if (ats.data.token) {
+          console.log('Login pavyko');
+          setLoginSuccess(true);
+        }
       })
       .catch((error) => {
         // prisiloginti nepavyko
         console.warn('ivyko klaida:', error);
         console.log('error.response.data.error ===', error.response.data.error);
         // formik.errors.email = error.response.data.error;
-        formik.setErrors({ email: error.response.data.error });
+        // formik.setErrors({ email: error.response.data.error });
+        formik.setErrors({ email: 'Email or password not found' });
       });
   }
 
@@ -97,33 +106,41 @@ export default function LoginPage() {
   return (
     <Wrap>
       <Title>Login here</Title>
-      <FormContainer onSubmit={formik.handleSubmit}>
-        <Input
-          $isError={formik.errors.email && formik.touched.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.email}
-          type='text'
-          placeholder='Email'
-          id='email'
-        />
-        {formik.errors.email && formik.touched.email && (
-          <ErrorMsg>{formik.errors.email}</ErrorMsg>
-        )}
-        <Input
-          isError={formik.errors.password && formik.touched.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.password}
-          type='password'
-          placeholder='Password'
-          id='password'
-        />
-        {formik.errors.password && formik.touched.password && (
-          <ErrorMsg>{formik.errors.password}</ErrorMsg>
-        )}
-        <SubmitBnt>Login</SubmitBnt>
-      </FormContainer>
+
+      {loginSuccess && (
+        <div>
+          <h2>Sekmimgai prisijungete kaip {formik.values.email}</h2>
+        </div>
+      )}
+      {!loginSuccess && (
+        <FormContainer onSubmit={formik.handleSubmit}>
+          <Input
+            $isError={formik.errors.email && formik.touched.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            type='text'
+            placeholder='Email'
+            id='email'
+          />
+          {formik.errors.email && formik.touched.email && (
+            <ErrorMsg>{formik.errors.email}</ErrorMsg>
+          )}
+          <Input
+            isError={formik.errors.password && formik.touched.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
+            type='password'
+            placeholder='Password'
+            id='password'
+          />
+          {formik.errors.password && formik.touched.password && (
+            <ErrorMsg>{formik.errors.password}</ErrorMsg>
+          )}
+          <SubmitBnt>Login</SubmitBnt>
+        </FormContainer>
+      )}
     </Wrap>
   );
 }
