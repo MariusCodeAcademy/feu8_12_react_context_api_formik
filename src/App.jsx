@@ -6,16 +6,34 @@ import Header from './components/layout/Header';
 import VipPage from './pages/VipPage';
 import LoginPage from './pages/LoginPage';
 import AuthContext from './store/AuthContext';
+import { useState } from 'react';
 
 export default function App() {
+  const [userEmail, setUserEmail] = useState(null);
+  // infered value (apskaiciuojama reiksme )
+  let isUserLoggedIn = userEmail ? true : false;
+  isUserLoggedIn = !!userEmail;
+  console.log('isUserLoggedIn ===', isUserLoggedIn);
+
+  function login(emailVal) {
+    // console.log('emailVal ===', emailVal);
+    setUserEmail(emailVal);
+  }
+
+  const ctx = {
+    email: userEmail,
+    isUserLoggedIn: isUserLoggedIn,
+    login: login,
+  };
+
   return (
-    <AuthContext.Provider value={'bubleGum'}>
+    <AuthContext.Provider value={ctx}>
       <Header />
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/about' element={<AboutPage />} />
-        <Route path='/vip' element={<VipPage />} />
-        <Route path='/login' element={<LoginPage />} />
+        {isUserLoggedIn && <Route path='/vip' element={<VipPage />} />}
+        {!isUserLoggedIn && <Route path='/login' element={<LoginPage />} />}
       </Routes>
     </AuthContext.Provider>
   );
