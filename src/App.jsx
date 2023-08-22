@@ -7,8 +7,6 @@ import VipPage from './pages/VipPage';
 import LoginPage from './pages/LoginPage';
 import AuthContext from './store/AuthContext';
 
-AuthContext;
-
 export default function App() {
   return (
     <AuthContext.Provider value={'bubleGum'}>

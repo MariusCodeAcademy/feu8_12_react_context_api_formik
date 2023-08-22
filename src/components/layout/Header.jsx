@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Link, NavLink } from 'react-router-dom';
 import Wrap from '../../styled/Wrap.styled';
+import { useContext } from 'react';
+import AuthContext from '../../store/AuthContext';
 
 const HeaderContainer = styled(Wrap)`
   display: flex;
@@ -33,6 +35,8 @@ const OneLink = styled(NavLink)`
 `;
 
 export default function Header() {
+  const ctx = useContext(AuthContext);
+  console.log('ctx', ctx);
   return (
     <HeaderContainer as={'header'}>
       <Logo to={'/'}>OurLogo</Logo>
