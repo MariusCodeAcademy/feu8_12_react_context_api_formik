@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Wrap from '../styled/Wrap.styled';
+import { useFormik } from 'formik';
 
 const Title = styled.h1`
   font-size: 35px;
@@ -24,12 +25,36 @@ const SubmitBnt = styled.button.attrs({
 `;
 
 export default function LoginPage() {
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: (values) => {
+      console.log('forma pateikta, duomenys:', values);
+    },
+  });
+
+  console.log('formik.values ===', formik.values);
+
   return (
     <Wrap>
       <Title>Login here</Title>
-      <form>
-        <Input type='text' placeholder='Email' id='email' />
-        <Input type='password' placeholder='Password' id='password' />
+      <form onSubmit={formik.handleSubmit}>
+        <Input
+          onChange={formik.handleChange}
+          value={formik.values.email}
+          type='text'
+          placeholder='Email'
+          id='email'
+        />
+        <Input
+          onChange={formik.handleChange}
+          value={formik.values.password}
+          type='password'
+          placeholder='Password'
+          id='password'
+        />
         <SubmitBnt>Login</SubmitBnt>
       </form>
     </Wrap>
