@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Wrap from '../styled/Wrap.styled';
+import Posts from '../components/Posts';
 
 const Title = styled.h1`
   font-size: 35px;
@@ -10,6 +11,7 @@ export default function AboutPage() {
     <Wrap>
       <Title>AboutPage</Title>
       <p>Welcome to our page</p>
+      <Posts />
     </Wrap>
   );
 }
