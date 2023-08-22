@@ -5,10 +5,13 @@ import './App.css';
 import Header from './components/layout/Header';
 import VipPage from './pages/VipPage';
 import LoginPage from './pages/LoginPage';
+import AuthContext from './store/AuthContext';
+
+AuthContext;
 
 export default function App() {
   return (
-    <div>
+    <AuthContext.Provider value={'bubleGum'}>
       <Header />
       <Routes>
         <Route path='/' element={<HomePage />} />
@@ -16,6 +19,6 @@ export default function App() {
         <Route path='/vip' element={<VipPage />} />
         <Route path='/login' element={<LoginPage />} />
       </Routes>
-    </div>
+    </AuthContext.Provider>
   );
 }
