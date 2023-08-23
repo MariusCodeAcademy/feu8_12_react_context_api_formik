@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useContext, useState } from 'react';
 import AuthContext from '../store/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Title = styled.h1`
   font-size: 35px;
@@ -48,6 +49,7 @@ const ErrorMsg = styled.p`
 `;
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const ctx = useContext(AuthContext);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
@@ -86,11 +88,13 @@ export default function LoginPage() {
         // jei gavom token tai pavyko prisiloginti
         // atspausdinti token
         console.log('ats.data.token ===', ats.data.token);
-        // naviguosim i home arba vip page
+
         if (ats.data.token) {
           console.log('Login pavyko');
           setLoginSuccess(true);
           ctx.login(formik.values.email);
+          // naviguosim i home arba vip page
+          navigate('/vip', { replace: true });
         }
       })
       .catch((error) => {
